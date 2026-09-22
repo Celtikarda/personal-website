@@ -5,290 +5,637 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ASUS Tuf Gaming</title>
-    <link rel="shortcut icon" href="/CSS/04.07.2026/Örnek Site/images.png">
+    <!-- Sekme ikonu (favicon) -->
+    <link rel="shortcut icon" href="Yeni-tuf-logo.png" type="image/png" sizes="32x32">
+    <!-- Arama motorları için açıklama ve anahtar kelimeler -->
     <meta name="description" content="Asus TUF Gaming oyuncu laptopları ve bilgisayar ürünleri mağazası.">
     <meta name="keywords" content="gaming laptop, bilgisayar, RTX laptop">
+    <!-- Google Fonts'a erken bağlantı kurarak yüklemeyi hızlandırır -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Sitede kullanılan üç font ailesi -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            min-height: 300vh;
-            border-width: 2px;
-            border-style: solid;
-            border-color: #ffb000;
-            background-color: #0d0d0d;
-            margin: 0px;
-            border-radius: 1px;
-
+        /* Tüm sayfada tekrar kullanılan renk ve font değerleri (tek yerden değiştirilebilsin diye) */
+        :root {
+            --bg: #0d0d0d;
+            --accent: #ffb000;
+            --accent-light: #ffd04d;
+            --text-primary: #ffffff;
+            --text-secondary: #b8b8b8;
+            --text-body: #d6d6d6;
+            --font-display: "Orbitron", sans-serif;
+            --font-heading: "Rajdhani", sans-serif;
+            --font-body: "Exo 2", sans-serif;
+            --header-height: 70px;
         }
 
+        /* padding ve border'ın genişlik/yükseklik hesabına dahil edilmesini sağlar */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg);
+            border: 2px solid var(--accent);
+            /* Sayfanın tamamını çevreleyen ince amber çerçeve */
+        }
+
+        /* ---------- Header (üst menü) ---------- */
 
         header {
-            height: 60px;
+            height: var(--header-height);
             display: flex;
             justify-content: space-between;
+            /* logo solda, menü sağda */
             align-items: center;
+            gap: 20px;
             padding: 0 60px;
-            background-color: #0d0d0d;
-            box-shadow: 0 0 20px #ffb000;
-            border-bottom: 2px solid #ffb000;
-
+            background-color: var(--bg);
+            box-shadow: 0 0 20px var(--accent);
+            /* amber parlama efekti */
+            border-bottom: 2px solid var(--accent);
 
             position: fixed;
-            /* Sayfayı kaydırsan da yukarıda sabit kalır */
+            /* sayfa kaydırılsa da her zaman üstte sabit kalır */
             top: 0;
-            /* En üste yapıştırır */
             left: 0;
-            /* En sola yapıştırır */
             width: 100%;
-            /* fixed olunca daralmasın diye tam genişlik verdik */
-            box-sizing: border-box;
-            /* padding (60px) yüzünden sağa taşma yapmasın diye ekledik */
             z-index: 1000;
-            /* Diğer elemanların (örneğin resmin) her zaman üstünde dursun diye */
-        }
-
-        article {
-            height: 90vh;
-            width: 100%;
-            background-image: url("kv_v2-p-3200.webp");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-
-
-
-
-            margin-top: 60px;
-            /* Header'ın yüksekliği kadar yukarıdan boşluk bıraktık */
-
+            /* diğer içeriklerin üstünde görünsün diye */
         }
 
         .logo {
-
-            width: 100px;
-            height: 45px;
-            background-image: url("pngegg.png");
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-
-        }
-
-
-        ul li {
-            list-style-type: none;
-
-
+            height: 42px;
+            width: auto;
+            /* oranı bozmadan yüksekliğe göre ölçekler */
         }
 
         nav {
-
             display: flex;
-            gap: 35px;
-
-
+            flex-wrap: wrap;
+            /* dar ekranlarda linkler alt satıra geçebilsin */
+            justify-content: flex-end;
+            gap: clamp(14px, 3vw, 35px);
+            /* ekran genişliğine göre esnek boşluk */
         }
 
-
         nav a {
-            font-family: 'Exo 2', sans-serif;
+            font-family: var(--font-body);
             font-weight: 600;
+            font-size: 14px;
             letter-spacing: 1.5px;
             text-decoration: none;
             color: antiquewhite;
+            white-space: nowrap;
+            /* link metni tek satırda kalsın */
         }
 
+        /* Menü linkine üzerine gelince amber renk */
         nav a:hover {
-
-            color: #ffb000;
-
+            color: var(--accent);
         }
 
-        #menu {
+        /* ---------- Hero (giriş / kapak alanı) ---------- */
+
+        .hero {
+            min-height: 90vh;
+            /* ekranın en az %90'ını kaplar */
+            margin-top: var(--header-height);
+            /* sabit header'ın altına gizlenmesin diye */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* içeriği tam ortalar */
             text-align: center;
-            text-decoration: whitesmoke;
+            padding: 60px 20px;
 
-
-
+            /* koyu gradyan + laptop fotoğrafı üst üste bindirilir, böylece üstteki yazı her zaman okunur */
+            background-image: linear-gradient(rgba(13, 13, 13, 0.55), rgba(13, 13, 13, 0.85)), url("Asus-tuf-resim-arka-planlı.webp");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
 
-        h1 {
-            font-family: "Orbitron", sans-serif;
-            padding-top: 1000px;
-            margin: 0px;
+        .hero-content {
+            max-width: 700px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+            /* başlık, rozetler ve buton arası eşit boşluk */
+        }
+
+        .hero-content h1 {
+            font-family: var(--font-display);
+            font-size: clamp(28px, 5vw, 46px);
+            /* ekran boyutuna göre otomatik küçülüp büyür */
             font-weight: 900;
-            color: white;
-
+            color: var(--text-primary);
+            margin: 0;
+            letter-spacing: 1px;
         }
 
-        h2 {
-
-            font-family: "Orbitron", sans-serif;
-
-            margin: 0px;
+        .hero-content h2 {
+            font-family: var(--font-display);
+            font-size: clamp(14px, 2.2vw, 20px);
             font-weight: 900;
-            color: #ffb000;
-
-
-
+            color: var(--accent);
+            margin: 0;
         }
 
-        .altlogo {
+        /* Nvidia / Intel rozetlerinin bulunduğu satır */
+        .hero-badges {
             display: flex;
+            flex-wrap: wrap;
             justify-content: center;
-            width: 100%;
-            height: 125px;
-            gap: 100px;
-
-            margin-top: 100px;
-
-
-
+            gap: 24px;
+            margin-top: 10px;
         }
 
-        .overviewp {
-            display: flex;
-            color: #ffb000;
-            font-style: italic;
-            justify-content: center;
-            margin-top: 200px;
-            display: flex;
-            text-align: center;
-            font-family: "Rajdhani", sans-serif;
-            font-weight: bolder;
-            font-size: xx-large;
+        .hero-badges img {
+            height: 64px;
+            width: auto;
+            border-radius: 6px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            /* rozetlerin altına hafif gölge */
         }
 
-        .overviewp2 {
-            display: flex;
-
-            justify-content: center;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: #b8b8b8;
-            font-size: larger;
-
-        }
-
-        .overviewp3 {
-            display: flex;
-            justify-content: center;
-            font-family: 'Exo 2', sans-serif;
-            font-weight: bolder;
-            font-size: xx-large;
-            color: #d6d6d6;
-
-        }
-
-        .learn {
-            display: flex;
-            justify-content: center;
-            margin-top: 30px;
-        }
-
-        .learn button {
-
-            width: 180px;
-            height: 50px;
-
-            background: #ffb000;
-            color: #0d0d0d;
-
+        /* "LEARN MORE" gibi buton görünümlü linkler için ortak stil */
+        .btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 14px 36px;
+            background: var(--accent);
+            color: var(--bg);
             border: none;
             border-radius: 5px;
-
-            font-family: 'Exo 2', sans-serif;
+            font-family: var(--font-body);
             font-size: 16px;
             font-weight: 700;
-
+            text-decoration: none;
             cursor: pointer;
-            transition: .3;
+            transition: background 0.3s, box-shadow 0.3s;
+            /* renk ve gölge değişimini yumuşatır */
         }
 
-        .learn button:hover {
-
-            background: #ffd04d;
-
-            box-shadow: 0 0 15px #ffb000;
-
+        .btn:hover {
+            background: var(--accent-light);
+            box-shadow: 0 0 15px var(--accent);
         }
 
-        .overview-picture {
-            margin-left: 150px;
+        /* ---------- Overview (ürün tanıtım) bölümü ---------- */
+
+        .overview {
+            display: flex;
+            flex-wrap: wrap-reverse;
+            /* dar ekranda görsel metnin üstüne geçer */
+            align-items: center;
+            justify-content: center;
+            gap: 60px;
+            padding: 100px 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+            /* içeriği yatayda ortalar */
         }
-        #overview{
-            margin-top: 800px;
-            margin-left: 125px;
+
+        .overview-media img {
+            display: block;
+            width: min(560px, 90vw);
+            /* geniş ekranda 560px, dar ekranda ekranın %90'ı */
+            height: auto;
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
+            /* ürün fotoğrafının altına gölge */
+        }
+
+        .overview-text {
+            max-width: 480px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Küçük, italik, amber renkli üst etiket ("OVERVIEW" yazısı) */
+        .overview-text .eyebrow {
+            font-family: var(--font-heading);
+            font-style: italic;
+            font-weight: bold;
+            font-size: 1.6rem;
+            color: var(--accent);
+            margin: 0;
+        }
+
+        .overview-text .tagline {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .overview-text .description {
+            font-family: var(--font-body);
+            font-weight: bold;
+            font-size: 1.4rem;
+            line-height: 1.5;
+            color: var(--text-body);
+            margin: 0;
+        }
+
+        /* ---------- Feature bölümleri (Performance / Cooling / Display ortak yapısı) ---------- */
+
+        .feature {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 60px;
+            padding: 80px 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            border-top: 1px solid rgba(255, 176, 0, 0.2);
+            /* bir üstteki bölümden ince bir çizgiyle ayrılır */
+        }
+
+        /* Görsel-metin sırasını ters çevirir, böylece bölümler sağa-sola zigzag dizilir */
+        .feature--reverse {
+            flex-direction: row-reverse;
+        }
+
+        .feature-media img {
+            display: block;
+            width: min(440px, 90vw);
+            height: auto;
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
+        }
+
+        .feature-text {
+            max-width: 460px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .feature-text h3 {
+            font-family: var(--font-display);
+            font-size: clamp(22px, 3vw, 30px);
+            font-weight: 900;
+            color: var(--accent);
+            margin: 0;
+        }
+
+        .feature-text ul {
+            margin: 0;
+            padding-left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: var(--text-body);
+        }
+
+        /* Madde işaretlerini (•) amber renk yapar */
+        .feature-text ul li::marker {
+            color: var(--accent);
+        }
+
+        /* ---------- Footer (alt bilgi) ---------- */
+
+        footer {
+            border-top: 2px solid var(--accent);
+            padding: 30px 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            text-align: center;
+            font-family: var(--font-body);
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .footer-logo {
+            height: 56px;
+            width: auto;
+        }
+
+        /* ---------- Specs (tüm teknik özellikler tablosu) ---------- */
+
+        .specs {
+            padding: 100px 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-top: 1px solid rgba(255, 176, 0, 0.2);
+        }
+
+        /* "SPECS" başlığı ve alt yazısı, ortalanmış */
+        .specs-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .specs-header .eyebrow {
+            font-family: var(--font-heading);
+            font-style: italic;
+            font-weight: bold;
+            font-size: 1.6rem;
+            color: var(--accent);
+            margin: 0;
+        }
+
+        .specs-header h3 {
+            font-family: var(--font-display);
+            font-size: clamp(24px, 4vw, 34px);
+            font-weight: 900;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        /* Özellik kartlarının grid'i: ekran genişliğine göre otomatik sütun sayısı belirler */
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 22px;
+        }
+
+        /* Her bir özellik kartının kutusu (hafif saydam arka plan + amber çerçeve) */
+        .specs-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 176, 0, 0.25);
+            border-radius: 10px;
+            padding: 20px 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .specs-card h4 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin: 0;
+        }
+
+        .specs-card p {
+            font-family: var(--font-body);
+            font-size: 0.92rem;
+            line-height: 1.5;
+            color: var(--text-body);
+            margin: 0;
+        }
+
+        /* ---------- Responsive (küçük ekran / mobil düzeltmeleri) ---------- */
+
+        @media (max-width: 700px) {
+            header {
+                padding: 0 20px;
+                /* mobilde kenar boşluğunu daraltır */
+            }
+
+            .overview,
+            .feature,
+            .feature--reverse {
+                flex-direction: column;
+                /* görsel ve metni alt alta diz */
+                padding: 60px 20px;
+                text-align: center;
+            }
+
+            .overview-text,
+            .feature-text {
+                align-items: center;
+            }
+
+            .feature-text ul {
+                padding-left: 0;
+                list-style-position: inside;
+                /* madde işaretleri metinle hizalı, taşma yapmasın diye */
+            }
+
+            .specs {
+                padding: 70px 20px;
+            }
         }
     </style>
 
 </head>
 
 <body>
+    <!-- Sayfanın her yerinde sabit görünen üst menü -->
     <header>
+        <img class="logo" src="Yeni-tuf-logo.png" alt="TUF Gaming logo">
 
-        <div class="logo"></div>
-
+        <!-- Aşağıdaki bölümlere (id'ler) kaydıran menü linkleri -->
         <nav>
-            <a href="#overview" class="overview">OVERVIEW</a>
+            <a href="#overview">OVERVIEW</a>
             <a href="#performance">PERFORMANCE</a>
             <a href="#cooling">COOLING</a>
             <a href="#display">DISPLAY</a>
             <a href="#specs">SPECS</a>
         </nav>
-
     </header>
 
-    <article>
-        <div id="menu">
+    <!-- Giriş bölümü: başlık, alt başlık, marka rozetleri ve "devamını gör" butonu -->
+    <section class="hero">
+        <div class="hero-content">
             <h1>ASUS TUF GAMİNG F16</h1>
             <h2>THE TRUE DEFİNİTİON OF GAMING</h2>
 
+            <div class="hero-badges">
+                <img src="nvidia-geforce-rtx.jpg" alt="Nvidia GeForce RTX logosu">
+                <img src="Intel-Core-i5-Logo.png" alt="İntel Core i5 logosu">
+            </div>
+
+            <!-- #overview bölümüne kaydırır -->
+            <a class="btn" href="#overview">LEARN MORE</a>
         </div>
-        <div class="altlogo">
-            <img src="/CSS/04.07.2026/Örnek Site/nvidia-geforce-rtx.jpg" alt="Nvidia logo">
-            <img src="/CSS/04.07.2026/Örnek Site/Intel_Core_i5_Logo_2020.png" alt="İntel logo">
+    </section>
 
+    <!-- Ürünün genel tanıtımı: solda/üstte fotoğraf, yanında kısa açıklama -->
+    <section id="overview" class="overview">
+        <div class="overview-media">
+            <img src="Asus-tuf-arka-plansız-2.webp" alt="ASUS TUF Gaming F16 üstten görünüm">
         </div>
-        <div class="overviewp">
-            <p>OVERVİEW</p>
 
+        <div class="overview-text">
+            <p class="eyebrow">OVERVİEW</p>
+            <p class="tagline">POWER , DURABİLİTY , PERFORMANCE</p>
+            <p class="description">
+                ASUS TUF Gaming F16 combines military-grade durability with powerful
+                Intel and NVIDIA hardware for gamers and creators.
+            </p>
         </div>
-        <div class="overviewp2">
-            <p>POWER , DURABİLİTY , PERFORMANCE</p>
+    </section>
 
+    <!-- Performans bölümü: görsel solda, özellik listesi sağda -->
+    <section id="performance" class="feature">
+        <div class="feature-media">
+            <img src="Asus-tuf-arka-plansız-1.webp" alt="ASUS TUF Gaming F16 önden görünüm">
         </div>
-        <div class="overviewp3">
-            <p>ASUS TUF Gaming F16 combines military-grade <br>
-                durability with powerful Intel and NVIDIA <br>
-                hardware for gamers and creators.</p>
 
+        <div class="feature-text">
+            <h3>PERFORMANCE</h3>
+            <ul>
+                <li>Intel Core i5-13450HX işlemci (10 çekirdek: 4E+6P, 3.40 GHz – 4.60 GHz Turbo)</li>
+                <li>NVIDIA GeForce RTX 5050 115W, 8GB GDDR7 bellek</li>
+                <li>40GB DDR5 5600MHz RAM</li>
+                <li>512GB PCIe 4.0 NVMe SSD</li>
+            </ul>
         </div>
-        <div class="learn">
-            <button>LEARN MORE</button>
-        </div>  
+    </section>
 
-    </article>
-    <div id="overview">
-        <img src="/CSS/04.07.2026/Örnek Site/fwebp (1).webp" alt="Hadise İfşa">
-          <p></p>
-    </div>
+    <!-- Soğutma bölümü: "feature--reverse" ile görsel bu sefer sağda gösterilir (zigzag düzen) -->
+    <section id="cooling" class="feature feature--reverse">
+        <div class="feature-media">
+            <img src="Asus-tuf-arka-plansız-3.webp" alt="ASUS TUF Gaming F16 klavye ve soğutma görünümü">
+        </div>
 
+        <div class="feature-text">
+            <h3>COOLING</h3>
+            <ul>
+                <li>İkili 84 bıçaklı Arc Flow Fan soğutma sistemi</li>
+                <li>5 adet özel ısı borusu, 4 egzoz kanalı</li>
+                <li>İşlemci üzerinde sıvı metal (liquid metal) termal macun</li>
+                <li>0.1mm inceliğinde bakır kanatçıklı radyatör ve toz filtreleri</li>
+            </ul>
+        </div>
+    </section>
 
-    <div id="aside">
+    <!-- Ekran bölümü: görsel tekrar solda -->
+    <section id="display" class="feature">
+        <div class="feature-media">
+            <img src="Asus-tuf-arka-plansız-4.webp" alt="ASUS TUF Gaming F16 ekran görünümü">
+        </div>
 
+        <div class="feature-text">
+            <h3>DISPLAY</h3>
+            <ul>
+                <li>16 inç WUXGA (1920 x 1200) çözünürlük</li>
+                <li>IPS panel, 165Hz yenileme hızı</li>
+                <li>300 nit parlaklık, mat / yansımasız yüzey</li>
+            </ul>
+        </div>
+    </section>
 
-    </div>
+    <!-- Tüm teknik özelliklerin kart grid'i halinde özeti -->
+    <section id="specs" class="specs">
+        <div class="specs-header">
+            <p class="eyebrow">SPECS</p>
+            <h3>TÜM TEKNİK ÖZELLİKLER</h3>
+        </div>
 
-    <div id="footer"></div>
+        <div class="specs-grid">
+            <div class="specs-card">
+                <h4>İşlemci</h4>
+                <p>Intel Core i5-13450HX &mdash; 10 çekirdek (4 verimlilik + 6 performans)</p>
+                <p>3.40 GHz taban / 4.60 GHz Turbo saat hızı</p>
+            </div>
 
+            <div class="specs-card">
+                <h4>Ekran Kartı</h4>
+                <p>NVIDIA GeForce RTX 5050 115W</p>
+                <p>8GB GDDR7 bellek, 128-bit arayüz</p>
+            </div>
+
+            <div class="specs-card">
+                <h4>Bellek (RAM)</h4>
+                <p>40GB DDR5, 5600MHz</p>
+            </div>
+
+            <div class="specs-card">
+                <h4>Depolama</h4>
+                <p>512GB PCIe 4.0 NVMe M.2 SSD</p>
+            </div>
+
+            <div class="specs-card">
+                <h4>Ekran</h4>
+                <p>16" WUXGA (1920 x 1200), IPS panel</p>
+                <p>165Hz yenileme hızı, 300 nit, mat/yansımasız yüzey</p>
+            </div>
+
+            <div class="specs-card">
+                <h4>Soğutma Sistemi</h4>
+                <p>İkili 84 bıçaklı Arc Flow Fan, 5 ısı borusu, 4 egzoz kanalı</p>
+                <p>İşlemcide sıvı metal termal macun</p>
+            </div>
+
+            <div class="specs-card">
+                <h4>Pil</h4>
+                <p>90 Wh, 4 hücreli Li-Ion</p>
+            </div>
+
+            <div class="specs-card">
+                <h4>Kablosuz Bağlantı</h4>
+                <p>Wi-Fi 6E (802.11ax)</p>
+                <p>Bluetooth 5.3</p>
+            </div>
+
+            <div class="specs-card">
+                <h4>Bağlantı Noktaları</h4>
+                <p>3x USB 3.2 Gen 2 (10 Gbps)</p>
+                <p>2x USB Type-C (DisplayPort destekli)</p>
+                <p>HDMI 2.1 (FRL), RJ45 LAN</p>
+            </div>
+
+            <div class="specs-card">
+                <h4>Ses</h4>
+                <p>Dolby Atmos destekli hoparlör sistemi</p>
+                <p>Hi-Res sertifikalı kulaklık çıkışı</p>
+            </div>
+
+            <div class="specs-card">
+                <h4>Kamera</h4>
+                <p>1080p kızılötesi (IR) webcam, gürültü engelleme</p>
+            </div>
+
+            <div class="specs-card">
+                <h4>Klavye</h4>
+                <p>Tek bölgeli RGB arka aydınlatmalı klavye</p>
+            </div>
+
+            <div class="specs-card">
+                <h4>İşletim Sistemi</h4>
+                <p>Windows 11 Pro</p>
+            </div>
+
+            <div class="specs-card">
+                <h4>Dayanıklılık</h4>
+                <p>MIL-STD-810H askeri sınıf dayanıklılık testleri</p>
+            </div>
+
+            <div class="specs-card">
+                <h4>Boyut &amp; Ağırlık</h4>
+                <p>354 x 269 x 27.3 mm</p>
+                <p>2.20 kg</p>
+            </div>
+
+            <div class="specs-card">
+                <h4>Renk</h4>
+                <p>Mecha Gray (Koyu Gri)</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sayfanın en altı: garanti logosu ve telif hakkı yazısı -->
+    <footer>
+        <img class="footer-logo" src="asus-tr-garanti-logo.png" alt="Asus Türkiye Garanti logosu">
+        &copy; 2026 ASUS TUF Gaming. Tüm hakları saklıdır.
+    </footer>
 
 </body>
 
