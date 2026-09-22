@@ -46,6 +46,19 @@
 
         /* ---------- Header (üst menü) ---------- */
 
+        /* Header'ın alt kenarındaki amber parlamayı yavaşça açıp söndürür */
+        @keyframes header-glow-pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 10px var(--accent);
+            }
+
+            50% {
+                box-shadow: 0 0 26px var(--accent);
+            }
+        }
+
         header {
             height: var(--header-height);
             display: flex;
@@ -55,8 +68,8 @@
             gap: 20px;
             padding: 0 60px;
             background-color: var(--bg);
-            box-shadow: 0 0 20px var(--accent);
-            /* amber parlama efekti */
+            animation: header-glow-pulse 2.4s ease-in-out infinite;
+            /* amber parlama efekti, yanıp söner */
             border-bottom: 2px solid var(--accent);
 
             position: fixed;
@@ -68,6 +81,14 @@
             /* diğer içeriklerin üstünde görünsün diye */
         }
 
+        /* Hareket hassasiyeti olan kullanıcılar için yanıp sönmeyi kapatır */
+        @media (prefers-reduced-motion: reduce) {
+            header {
+                animation: none;
+                box-shadow: 0 0 20px var(--accent);
+            }
+        }
+
         .logo {
             height: 42px;
             width: auto;
@@ -76,8 +97,6 @@
 
         nav {
             display: flex;
-            flex-wrap: wrap;
-            /* dar ekranlarda linkler alt satıra geçebilsin */
             justify-content: flex-end;
             gap: clamp(14px, 3vw, 35px);
             /* ekran genişliğine göre esnek boşluk */
@@ -97,6 +116,30 @@
         /* Menü linkine üzerine gelince amber renk */
         nav a:hover {
             color: var(--accent);
+        }
+
+        /* Hamburger menü butonu: sadece dar ekranlarda görünür (bkz. responsive blok) */
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            width: 38px;
+            height: 38px;
+            padding: 0;
+            background: transparent;
+            border: 1px solid rgba(255, 176, 0, 0.4);
+            border-radius: 6px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .nav-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--accent);
         }
 
         /* ---------- Hero (giriş / kapak alanı) ---------- */
@@ -491,20 +534,134 @@
             margin: 0;
         }
 
-        /* ---------- Responsive (küçük ekran / mobil düzeltmeleri) ---------- */
+        /* ---------- Lightbox (görsele tıklayınca büyük ve gezinilebilir açılması) ---------- */
 
-        @media (max-width: 700px) {
+        /* Görsel üzerindeki ince yazılar küçük ekranda sıkışınca, dokunarak orijinal
+           boyutunda kaydırarak okumak için büyütülebilir görseller */
+        .zoomable {
+            cursor: zoom-in;
+        }
+
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(0, 0, 0, 0.92);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .lightbox.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .lightbox-scroll {
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            /* dar ekranda görsel doğal genişliğinde kalır, kullanıcı kaydırarak okur */
+            display: flex;
+            justify-content: center;
+            padding: 56px 16px 24px;
+        }
+
+        .lightbox-scroll img {
+            display: block;
+            width: 1000px;
+            max-width: none;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 40px rgba(255, 176, 0, 0.2);
+        }
+
+        .lightbox-close {
+            position: fixed;
+            top: 14px;
+            right: 16px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--accent);
+            background: rgba(13, 13, 13, 0.9);
+            color: var(--accent);
+            font-family: var(--font-body);
+            font-size: 22px;
+            line-height: 1;
+            cursor: pointer;
+            z-index: 2001;
+        }
+
+        /* ---------- Responsive (tablet / küçük laptop / telefon düzeltmeleri) ---------- */
+
+        /* Tablet ve küçük laptop: menü hamburger'a döner (nav asla iki satıra bölünüp
+           sabit yükseklikli header'dan taşmasın diye), boşluklar sıkılaştırılır */
+        @media (max-width: 1024px) {
             header {
-                padding: 0 20px;
-                /* mobilde kenar boşluğunu daraltır */
+                padding: 0 24px;
+            }
+
+            .nav-toggle {
+                display: flex;
+            }
+
+            nav {
+                position: fixed;
+                top: var(--header-height);
+                left: 0;
+                right: 0;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0;
+                max-height: 0;
+                overflow: hidden;
+                background: var(--bg);
+                border-bottom: 2px solid var(--accent);
+                transition: max-height 0.3s ease;
+            }
+
+            /* JS bu sınıfı ekleyip çıkararak menüyü açar/kapatır */
+            nav.open {
+                max-height: 320px;
+            }
+
+            nav a {
+                padding: 16px 24px;
+                border-top: 1px solid rgba(255, 176, 0, 0.15);
+            }
+
+            .hero,
+            .overview,
+            .feature,
+            .feature--reverse,
+            .specs {
+                padding-left: 32px;
+                padding-right: 32px;
             }
 
             .overview,
             .feature,
             .feature--reverse {
+                gap: 40px;
+                padding-top: 60px;
+                padding-bottom: 60px;
+            }
+
+            .specs {
+                padding-top: 70px;
+                padding-bottom: 70px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .overview,
+            .feature,
+            .feature--reverse {
                 flex-direction: column;
                 /* görsel ve metni alt alta diz */
-                padding: 60px 20px;
+                padding-left: 20px;
+                padding-right: 20px;
                 text-align: center;
             }
 
@@ -520,11 +677,46 @@
             }
 
             .specs {
-                padding: 70px 20px;
+                padding-left: 20px;
+                padding-right: 20px;
             }
 
             .specs-highlight-caption {
                 padding: 14px 18px;
+            }
+        }
+
+        /* Çok küçük telefonlar: son bir sıkılaştırma turu */
+        @media (max-width: 420px) {
+            header {
+                padding: 0 16px;
+            }
+
+            .hero {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .hero-content h1 {
+                font-size: 26px;
+            }
+
+            .btn {
+                padding: 12px 28px;
+                font-size: 15px;
+            }
+
+            .specs-card {
+                padding: 16px;
+            }
+
+            .specs-highlight-caption {
+                padding: 12px 14px;
+                gap: 10px;
+            }
+
+            .specs-highlight-caption h4 {
+                font-size: 0.95rem;
             }
         }
     </style>
@@ -536,8 +728,16 @@
     <header>
         <img class="logo" src="Yeni-tuf-logo.png" alt="TUF Gaming logo">
 
+        <!-- Tablet/telefon genişliğinde menü linkleri yerine bu buton görünür -->
+        <button class="nav-toggle" id="navToggle" aria-label="Menüyü aç/kapat" aria-expanded="false"
+            aria-controls="siteNav">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
         <!-- Aşağıdaki bölümlere (id'ler) kaydıran menü linkleri -->
-        <nav>
+        <nav id="siteNav">
             <a href="#overview">OVERVIEW</a>
             <a href="#performance">PERFORMANCE</a>
             <a href="#cooling">COOLING</a>
@@ -598,7 +798,7 @@
     <!-- Soğutma bölümü: "feature--reverse" ile görsel bu sefer sağda gösterilir (zigzag düzen) -->
     <section id="cooling" class="feature feature--reverse">
         <div class="feature-media">
-            <img src="cooling-fan.png" alt="ASUS TUF Gaming F16 çift fan soğutma sistemi görünümü">
+            <img class="zoomable" src="cooling-fan.png" alt="ASUS TUF Gaming F16 çift fan soğutma sistemi görünümü">
         </div>
 
         <div class="feature-text">
@@ -648,7 +848,8 @@
                     <h4>Dayanıklılık</h4>
                 </div>
                 <div class="specs-highlight-media">
-                    <img src="durability.png" alt="ASUS TUF Gaming F16 MIL-STD-810H askeri sınıf dayanıklılık testleri">
+                    <img class="zoomable" src="durability.png"
+                        alt="ASUS TUF Gaming F16 MIL-STD-810H askeri sınıf dayanıklılık testleri">
                 </div>
             </div>
 
@@ -665,7 +866,7 @@
                     <h4>Pil &amp; Şarj</h4>
                 </div>
                 <div class="specs-highlight-media">
-                    <img src="battery.png" alt="ASUS TUF Gaming F16 90Wh pil ve hızlı şarj teknolojisi">
+                    <img class="zoomable" src="battery.png" alt="ASUS TUF Gaming F16 90Wh pil ve hızlı şarj teknolojisi">
                 </div>
             </div>
 
@@ -681,7 +882,7 @@
                     <h4>Bağlantı Noktaları</h4>
                 </div>
                 <div class="specs-highlight-media">
-                    <img src="ports.png" alt="ASUS TUF Gaming F16 bağlantı noktaları şeması">
+                    <img class="zoomable" src="ports.png" alt="ASUS TUF Gaming F16 bağlantı noktaları şeması">
                 </div>
             </div>
         </div>
@@ -939,6 +1140,67 @@
         &copy; 2026 ASUS TUF Gaming. Tüm hakları saklıdır.
     </footer>
 
+    <!-- "zoomable" görsellere tıklanınca burada orijinal boyutunda açılır -->
+    <div class="lightbox" id="lightbox" aria-hidden="true">
+        <button class="lightbox-close" id="lightboxClose" aria-label="Kapat">&times;</button>
+        <div class="lightbox-scroll">
+            <img id="lightboxImg" src="" alt="">
+        </div>
+    </div>
+
+    <script>
+        // Hamburger menü: tablet/telefon genişliğinde nav'ı açıp kapatır
+        (function () {
+            var toggle = document.getElementById('navToggle');
+            var nav = document.getElementById('siteNav');
+
+            toggle.addEventListener('click', function () {
+                var isOpen = nav.classList.toggle('open');
+                toggle.setAttribute('aria-expanded', String(isOpen));
+            });
+
+            // Bir linke tıklayınca menü otomatik kapansın
+            nav.querySelectorAll('a').forEach(function (link) {
+                link.addEventListener('click', function () {
+                    nav.classList.remove('open');
+                    toggle.setAttribute('aria-expanded', 'false');
+                });
+            });
+        })();
+
+        // Lightbox: küçük ekranda okunması zor olan görselleri orijinal boyutunda,
+        // kaydırarak (gerekirse iki parmakla yakınlaştırarak) okunabilir hale getirir
+        (function () {
+            var lightbox = document.getElementById('lightbox');
+            var lightboxImg = document.getElementById('lightboxImg');
+            var closeBtn = document.getElementById('lightboxClose');
+
+            function openLightbox(src, alt) {
+                lightboxImg.src = src;
+                lightboxImg.alt = alt;
+                lightbox.classList.add('open');
+                lightbox.setAttribute('aria-hidden', 'false');
+            }
+
+            function closeLightbox() {
+                lightbox.classList.remove('open');
+                lightbox.setAttribute('aria-hidden', 'true');
+            }
+
+            document.querySelectorAll('.zoomable').forEach(function (img) {
+                img.addEventListener('click', function () {
+                    openLightbox(img.src, img.alt);
+                });
+            });
+
+            closeBtn.addEventListener('click', closeLightbox);
+            lightbox.addEventListener('click', function (e) {
+                if (e.target === lightbox) {
+                    closeLightbox();
+                }
+            });
+        })();
+    </script>
 </body>
 
 </html>
