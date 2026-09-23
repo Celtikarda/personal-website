@@ -975,6 +975,8 @@
             <div class="toast-photo"><img src="turbo-easter-egg.jpg" alt=""></div>
             <span id="modeToastText"></span>
         </div>
+        <!-- Turbo'ya geçince çalan ses (DMC3, Vergil: "Now I'm a little motivated") -->
+        <audio id="turboSound" src="turbo-sound.mp3" preload="auto"></audio>
 
         <!-- Tablet/telefon genişliğinde menü linkleri yerine bu buton görünür -->
         <button class="nav-toggle" id="navToggle" aria-label="Menüyü aç/kapat" aria-expanded="false"
@@ -1456,6 +1458,8 @@
             var leds = document.getElementById('statusLeds');
             var toast = document.getElementById('modeToast');
             var toastText = document.getElementById('modeToastText');
+            var turboSound = document.getElementById('turboSound');
+            turboSound.volume = 0.7;
             var modes = ['silent', 'balanced', 'turbo'];
             var labels = {
                 silent: 'SILENT MODE',
@@ -1478,6 +1482,14 @@
                 void toast.offsetWidth; // yakınlaşma animasyonu her seferinde baştan oynasın diye
                 toast.classList.toggle('turbo', mode === 'turbo');
                 toast.classList.add('show');
+
+                // Ses her Turbo'da baştan çalar; tarayıcı engellerse sessizce geçilir
+                if (mode === 'turbo') {
+                    turboSound.currentTime = 0;
+                    turboSound.play().catch(function () { });
+                } else {
+                    turboSound.pause();
+                }
 
                 clearTimeout(hideTimer);
                 hideTimer = setTimeout(function () {
