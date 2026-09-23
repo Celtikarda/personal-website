@@ -175,7 +175,7 @@
             }
         }
 
-        /* ---------- Easter egg: Fn+F5 mod değiştirme (Silent / Performance / Turbo) ---------- */
+        /* ---------- Easter egg: Fn+F5 mod değiştirme (Silent / Balanced / Turbo) ---------- */
 
         /* X ışığına tıklanabilsin diye; ipucu vermemek için sadece imleç değişir */
         .status-leds {
@@ -1448,26 +1448,28 @@
                 }
             });
         })();
+
         // Easter egg: laptoptaki Fn+F5 gibi, X ışığına her tıklamada
-        // Performance → Turbo → Silent arasında geçer. Konami kodu doğrudan Turbo'ya atlar.
+        // Silent → Balanced → Turbo arasında geçer (sayfa Balanced görünümüyle açılır,
+        // ilk tıklama Silent'a geçer). Konami kodu doğrudan Turbo'ya atlar.
         (function () {
             var leds = document.getElementById('statusLeds');
             var toast = document.getElementById('modeToast');
             var toastText = document.getElementById('modeToastText');
-            var modes = ['performance', 'turbo', 'silent'];
+            var modes = ['silent', 'balanced', 'turbo'];
             var labels = {
                 silent: 'SILENT MODE',
-                performance: 'PERFORMANCE MODE',
+                balanced: 'BALANCED MODE',
                 turbo: 'TURBO MODE ACTIVATED'
             };
-            var current = 0;
+            var current = -1; // henüz mod seçilmedi, böylece ilk tıklama Silent olur
             var hideTimer;
 
             function setMode(index) {
                 current = index;
                 var mode = modes[current];
                 document.body.classList.remove('mode-silent', 'mode-turbo');
-                if (mode !== 'performance') {
+                if (mode !== 'balanced') {
                     document.body.classList.add('mode-' + mode);
                 }
 
