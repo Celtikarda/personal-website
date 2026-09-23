@@ -175,6 +175,147 @@
             }
         }
 
+        /* ---------- Easter egg: Fn+F5 mod değiştirme (Silent / Performance / Turbo) ---------- */
+
+        /* X ışığına tıklanabilsin diye; ipucu vermemek için sadece imleç değişir */
+        .status-leds {
+            pointer-events: auto;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .status-leds:focus-visible {
+            outline: 1px dashed rgba(255, 255, 255, 0.4);
+            outline-offset: 6px;
+        }
+
+        /* Silent: ışık yavaş ve sönük yanıp söner */
+        body.mode-silent .status-leds .led-on {
+            animation-duration: 7s;
+        }
+
+        body.mode-silent .status-leds .led-on.led-bottom {
+            animation-delay: -3.5s;
+        }
+
+        body.mode-silent .status-leds .led-glow,
+        body.mode-silent .status-leds .led-core {
+            opacity: 0.45;
+        }
+
+        /* Turbo: ışık amber olur ve hızlı yanıp söner, header parlaması güçlenir */
+        body.mode-turbo .status-leds .led-on {
+            animation-duration: 0.5s;
+        }
+
+        body.mode-turbo .status-leds .led-on.led-bottom {
+            animation-delay: -0.25s;
+        }
+
+        body.mode-turbo .status-leds .led-glow {
+            stroke: rgba(255, 176, 0, 0.85);
+        }
+
+        body.mode-turbo .status-leds .led-core {
+            stroke: var(--accent-light);
+            filter: drop-shadow(0 0 2px var(--accent-light)) drop-shadow(0 0 7px var(--accent)) drop-shadow(0 0 14px rgba(255, 140, 0, 0.9));
+        }
+
+        @keyframes header-glow-turbo {
+
+            0%,
+            100% {
+                box-shadow: 0 0 18px var(--accent);
+            }
+
+            50% {
+                box-shadow: 0 0 48px var(--accent), 0 0 90px rgba(255, 140, 0, 0.5);
+            }
+        }
+
+        body.mode-turbo header {
+            animation: header-glow-turbo 0.6s ease-in-out infinite;
+        }
+
+        /* Mod değişince header'ın altında beliren bildirim */
+        .mode-toast {
+            position: fixed;
+            top: calc(var(--header-height) + 14px);
+            left: 50%;
+            z-index: 1500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            max-width: calc(100vw - 32px);
+            padding: 10px 18px;
+            background: rgba(13, 13, 13, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 8px;
+            font-family: var(--font-display);
+            font-size: 13px;
+            letter-spacing: 2px;
+            color: var(--text-primary);
+            text-align: center;
+            opacity: 0;
+            transform: translate(-50%, -10px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            pointer-events: none;
+        }
+
+        .mode-toast.show {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+
+        .mode-toast .toast-photo {
+            display: none;
+            width: min(360px, 80vw);
+            border-radius: 4px;
+            overflow: hidden;
+            /* yakınlaşan fotoğraf kutunun dışına taşmasın */
+        }
+
+        .mode-toast .toast-photo img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        /* Turbo'da fotoğraf görünür ve dramatik şekilde yakınlaşır */
+        @keyframes turbo-zoom {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.25);
+            }
+        }
+
+        .mode-toast.turbo {
+            border-color: var(--accent);
+            color: var(--accent);
+            box-shadow: 0 0 30px rgba(255, 176, 0, 0.5);
+        }
+
+        .mode-toast.turbo .toast-photo {
+            display: block;
+        }
+
+        .mode-toast.turbo .toast-photo img {
+            animation: turbo-zoom 3s ease-out forwards;
+        }
+
+        /* Hareket hassasiyeti olan kullanıcılar için hızlı parlama ve yakınlaşma olmaz */
+        @media (prefers-reduced-motion: reduce) {
+
+            body.mode-turbo header,
+            .mode-toast.turbo .toast-photo img {
+                animation: none;
+            }
+        }
+
         nav {
             display: flex;
             justify-content: flex-end;
@@ -812,7 +953,8 @@
         <img class="logo" src="Yeni-tuf-logo.png" alt="TUF Gaming logo">
 
         <!-- Laptoptaki X şeklindeki durum ışığı: sönük şeritler, üstüne hale + parlak çekirdek -->
-        <svg class="status-leds" viewBox="164 87 162 121" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+        <svg class="status-leds" id="statusLeds" viewBox="164 87 162 121" role="button" tabindex="0"
+            aria-label="Performans modunu değiştir" xmlns="http://www.w3.org/2000/svg">
             <g class="led-off">
                 <line x1="180" y1="100" x2="220" y2="132" /><line x1="310" y1="100" x2="270" y2="132" />
                 <line x1="220" y1="163" x2="180" y2="195" /><line x1="270" y1="163" x2="310" y2="195" />
@@ -827,6 +969,12 @@
                 <g class="led-core"><line x1="220" y1="163" x2="180" y2="195" /><line x1="270" y1="163" x2="310" y2="195" /></g>
             </g>
         </svg>
+
+        <!-- Easter egg: X ışığına tıklayınca mod adını (Turbo'da fotoğrafı da) gösteren bildirim -->
+        <div class="mode-toast" id="modeToast" role="status" aria-live="polite">
+            <div class="toast-photo"><img src="turbo-easter-egg.jpg" alt=""></div>
+            <span id="modeToastText"></span>
+        </div>
 
         <!-- Tablet/telefon genişliğinde menü linkleri yerine bu buton görünür -->
         <button class="nav-toggle" id="navToggle" aria-label="Menüyü aç/kapat" aria-expanded="false"
@@ -887,7 +1035,7 @@
         <div class="feature-text">
             <h3>PERFORMANCE</h3>
             <ul>
-                <li>Intel Core i5-13450HX işlemci (10 çekirdek: 4P+6E, 3.40 GHz – 4.60 GHz Turbo)</li>
+                <li>Intel Core i5-13450HX işlemci (10 çekirdek: 4P+6E, 2.40 GHz – 4.60 GHz Turbo)</li>
                 <li>NVIDIA GeForce RTX 5050 115W, 8GB GDDR7 bellek</li>
                 <li>16GB DDR5 5600MHz RAM</li>
                 <li>512GB PCIe 4.0 NVMe SSD</li>
@@ -1297,6 +1445,69 @@
             lightbox.addEventListener('click', function (e) {
                 if (e.target === lightbox) {
                     closeLightbox();
+                }
+            });
+        })();
+        // Easter egg: laptoptaki Fn+F5 gibi, X ışığına her tıklamada
+        // Performance → Turbo → Silent arasında geçer. Konami kodu doğrudan Turbo'ya atlar.
+        (function () {
+            var leds = document.getElementById('statusLeds');
+            var toast = document.getElementById('modeToast');
+            var toastText = document.getElementById('modeToastText');
+            var modes = ['performance', 'turbo', 'silent'];
+            var labels = {
+                silent: 'SILENT MODE',
+                performance: 'PERFORMANCE MODE',
+                turbo: 'TURBO MODE ACTIVATED'
+            };
+            var current = 0;
+            var hideTimer;
+
+            function setMode(index) {
+                current = index;
+                var mode = modes[current];
+                document.body.classList.remove('mode-silent', 'mode-turbo');
+                if (mode !== 'performance') {
+                    document.body.classList.add('mode-' + mode);
+                }
+
+                toastText.textContent = labels[mode];
+                toast.classList.remove('show', 'turbo');
+                void toast.offsetWidth; // yakınlaşma animasyonu her seferinde baştan oynasın diye
+                toast.classList.toggle('turbo', mode === 'turbo');
+                toast.classList.add('show');
+
+                clearTimeout(hideTimer);
+                hideTimer = setTimeout(function () {
+                    toast.classList.remove('show');
+                }, mode === 'turbo' ? 3000 : 1500);
+            }
+
+            function nextMode() {
+                setMode((current + 1) % modes.length);
+            }
+
+            leds.addEventListener('click', nextMode);
+            leds.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    nextMode();
+                }
+            });
+
+            // Konami kodu: ↑ ↑ ↓ ↓ ← → ← → B A
+            var konami = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+            var progress = 0;
+            document.addEventListener('keydown', function (e) {
+                var key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+                if (key === konami[progress]) {
+                    progress++;
+                } else {
+                    progress = key === konami[0] ? 1 : 0;
+                }
+                if (progress === konami.length) {
+                    progress = 0;
+                    setMode(modes.indexOf('turbo'));
                 }
             });
         })();
