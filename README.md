@@ -1,25 +1,40 @@
-# Kişisel Web Sayfam
+# ASUS TUF Gaming F16 — Konsept Tanıtım Sayfası
 
-Front-end geliştirme becerilerimi göstermek için sıfırdan tasarladığım, tamamen responsive kişisel web sayfam.
+Front-end becerilerimi geliştirmek için sıfırdan tasarladığım, ASUS TUF Gaming F16 için tek sayfalık bir ürün tanıtım sitesi. Framework veya kütüphane kullanılmadı; her şey düz HTML, CSS ve JavaScript.
+
+> Eğitim amaçlı konsept çalışmadır, ASUS ile bağlantılı değildir. Ürün adları, logolar ve görseller sahiplerine aittir.
 
 ## Canlı Demo
 
-[Buradan görüntüleyebilirsiniz](https://celtikarda.github.io/personal-website/)
+[celtikarda.github.io/personal-website](https://celtikarda.github.io/personal-website/)
 
-## Kullanılan Teknolojiler
+## Ekran Görüntüleri
 
-- **HTML5** — semantik ve erişilebilir yapı
-- **CSS3** — Flexbox ve Grid ile responsive mizanpaj
-- **JavaScript (ES6+)** — DOM manipülasyonu ve etkileşimli bileşenler
+<p align="center">
+  <img src="screenshots/desktop.jpg" alt="Masaüstü görünümü" width="68%">
+  &nbsp;
+  <img src="screenshots/mobile.jpg" alt="Telefon görünümü" width="24%">
+</p>
 
 ## Öne Çıkan Özellikler
 
-- Mobil, tablet ve masaüstü ekranlarla uyumlu tasarım
-- CSS box model ve konumlandırma teknikleriyle temiz arayüz
-- JavaScript ile yönetilen dinamik menü ve form kontrolleri
+- **Responsive tasarım:** Telefon, tablet, küçük laptop ve masaüstü için ayrı kırılım noktaları. Görsel ve metin geniş ekranda yan yana, dar ekranda alt alta dizilir; yatay telefonda header incelir.
+- **Mobil menü:** 1100 px altında hamburger menüye döner; Esc tuşu ya da menü dışına dokunmakla kapanır.
+- **Lightbox:** Üzerinde yazı olan ürün görsellerine tıklayınca orijinal boyutunda açılır, küçük ekranda kaydırarak okunur.
+- **Teknik özellikler:** İkonlu kart grid'i ve öne çıkan özellik kartları.
+- **Erişilebilirlik:** `prefers-reduced-motion` desteği, klavyeyle kullanılabilen menü, `aria` etiketleri.
+- **Easter egg:** Sayfada gizli bir sürpriz var. İpucu: gerçek TUF F16'daki Fn+F5 tuşu.
+
+## Kullanılan Teknolojiler
+
+- **HTML5** — semantik bölümler (`header`, `section`, `footer`)
+- **CSS3** — Flexbox, Grid, CSS değişkenleri, `clamp()`, keyframe animasyonları, media query'ler
+- **JavaScript** — framework'süz; menü, lightbox ve easter egg
 
 ## Yerelde Çalıştırma
 
+```bash
 git clone https://github.com/Celtikarda/personal-website.git
+```
 
 Klonladıktan sonra `index.html` dosyasını tarayıcıda açmanız yeterli.
