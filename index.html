@@ -8,7 +8,8 @@
     <!-- Sekme ikonu (favicon) -->
     <link rel="shortcut icon" href="Yeni-tuf-logo.png" type="image/png" sizes="32x32">
     <!-- Arama motorları için açıklama ve anahtar kelimeler -->
-    <meta name="description" content="Asus TUF Gaming oyuncu laptopları ve bilgisayar ürünleri mağazası.">
+    <meta name="description" content="ASUS TUF Gaming F16 için hazırlanmış, resmi olmayan konsept tanıtım sayfası.">
+    <meta name="author" content="Celtikarda">
     <meta name="keywords" content="gaming laptop, bilgisayar, RTX laptop">
     <!-- Google Fonts'a erken bağlantı kurarak yüklemeyi hızlandırır -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -589,6 +590,25 @@
         .footer-logo {
             height: 56px;
             width: auto;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* "Resmi değildir" notu, telif satırından bir tık daha sönük */
+        .footer-note {
+            font-size: 12px;
+            opacity: 0.75;
         }
 
         /* ---------- Specs (tüm teknik özellikler tablosu) ---------- */
@@ -1384,10 +1404,12 @@
         </div>
     </section>
 
-    <!-- Sayfanın en altı: garanti logosu ve telif hakkı yazısı -->
+    <!-- Sayfanın en altı: garanti logosu, sayfayı yapan kişi ve "resmi değildir" notu -->
     <footer>
         <img class="footer-logo" src="asus-tr-garanti-logo.png" alt="Asus Türkiye Garanti logosu">
-        &copy; 2026 ASUS TUF Gaming. Tüm hakları saklıdır.
+        <p>&copy; 2026 <a href="https://github.com/Celtikarda">Celtikarda</a></p>
+        <p class="footer-note">Eğitim amaçlı konsept çalışmadır, ASUS ile bağlantılı değildir.
+            Ürün adları, logolar ve görseller sahiplerine aittir.</p>
     </footer>
 
     <!-- "zoomable" görsellere tıklanınca burada orijinal boyutunda açılır -->
