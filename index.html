@@ -35,6 +35,12 @@
             --font-heading: "Rajdhani", sans-serif;
             --font-body: "Exo 2", sans-serif;
             --header-height: 70px;
+            --glow-cycle: 4s;
+            /* header parlaması, logo ve navbar link dalgasının ortak ritmi (Turbo'da kısalır) */
+        }
+
+        body.mode-turbo {
+            --glow-cycle: 1s;
         }
 
         /* padding ve border'ın genişlik/yükseklik hesabına dahil edilmesini sağlar */
@@ -64,15 +70,18 @@
 
         /* ---------- Header (üst menü) ---------- */
 
-        /* Header'ın alt kenarındaki amber parlamayı yavaşça açıp söndürür */
+        /* Header'ın alt kenarındaki amber parlama: yanar, döngünün %8-40'ı boyunca parlak kalır,
+           söner ve döngünün ikinci yarısında sönük bekler (o sırada navbar linkleri sırayla yanar) */
         @keyframes header-glow-pulse {
 
             0%,
+            48%,
             100% {
                 box-shadow: 0 0 10px var(--accent);
             }
 
-            50% {
+            8%,
+            40% {
                 box-shadow: 0 0 26px var(--accent);
             }
         }
@@ -86,7 +95,7 @@
             gap: 20px;
             padding: 0 60px;
             background-color: var(--bg);
-            animation: header-glow-pulse 2.4s ease-in-out infinite;
+            animation: header-glow-pulse var(--glow-cycle) ease-in-out infinite;
             /* amber parlama efekti, yanıp söner */
             border-bottom: 2px solid var(--accent);
 
@@ -112,16 +121,18 @@
             }
         }
 
-        /* Logo (favicondaki amber amblem), header'ın alt parlamasıyla aynı ritimde (2.4s)
-           amber hale ile yanıp söner: ikisi de %50'de en parlak */
+        /* Logo (favicondaki amber amblem), header'ın alt parlamasıyla aynı ritimde ve aynı
+           şekilde amber hale ile yanıp söner: ikisi de döngünün %8-40'ında parlak */
         @keyframes logo-glow-pulse {
 
             0%,
+            48%,
             100% {
                 filter: drop-shadow(0 0 2px rgba(255, 176, 0, 0.45)) drop-shadow(0 0 6px rgba(255, 176, 0, 0.2));
             }
 
-            50% {
+            8%,
+            40% {
                 filter: drop-shadow(0 0 4px rgba(255, 176, 0, 0.95)) drop-shadow(0 0 14px rgba(255, 176, 0, 0.6));
             }
         }
@@ -130,7 +141,7 @@
             height: 34px;
             width: auto;
             /* oranı bozmadan yüksekliğe göre ölçekler */
-            animation: logo-glow-pulse 2.4s ease-in-out infinite;
+            animation: logo-glow-pulse var(--glow-cycle) ease-in-out infinite;
         }
 
         /* ---------- Durum ışığı (laptoptaki X şeklindeki 4 çubuklu LED) ---------- */
@@ -260,35 +271,39 @@
         @keyframes header-glow-turbo {
 
             0%,
+            48%,
             100% {
                 box-shadow: 0 0 18px var(--accent);
             }
 
-            50% {
+            8%,
+            40% {
                 box-shadow: 0 0 48px var(--accent), 0 0 90px rgba(255, 140, 0, 0.5);
             }
         }
 
         body.mode-turbo header {
-            animation: header-glow-turbo 0.6s ease-in-out infinite;
+            animation: header-glow-turbo var(--glow-cycle) ease-in-out infinite;
         }
 
-        /* Turbo'da logo da header'la aynı anda (aynı 0.6s ritim) daha güçlü parlar.
-           Mod değişince iki animasyon aynı anda yeniden başladığı için senkron kalırlar */
+        /* Turbo'da logo da header'la aynı anda (aynı kısa ritim) daha güçlü parlar.
+           Mod değişince animasyonlar aynı anda yeniden başladığı için senkron kalırlar */
         @keyframes logo-glow-turbo {
 
             0%,
+            48%,
             100% {
                 filter: drop-shadow(0 0 3px rgba(255, 176, 0, 0.7)) drop-shadow(0 0 8px rgba(255, 140, 0, 0.35));
             }
 
-            50% {
+            8%,
+            40% {
                 filter: drop-shadow(0 0 6px var(--accent-light)) drop-shadow(0 0 22px rgba(255, 140, 0, 0.95));
             }
         }
 
         body.mode-turbo .logo {
-            animation: logo-glow-turbo 0.6s ease-in-out infinite;
+            animation: logo-glow-turbo var(--glow-cycle) ease-in-out infinite;
         }
 
         /* Mod değişince header'ın altında beliren bildirim */
@@ -378,25 +393,25 @@
             /* ekran genişliğine göre esnek boşluk */
         }
 
-        /* Bir linkin ne kadar yandığı (0 = sönük, 1 = tam amber). @property ile sayı olarak
-           tanımlandığı için animasyonda yumuşakça değişir; renk ve parlama bu tek değerden hesaplanır */
+        /* Bir linkin ne kadar yandığı (0 = sönük, 1 = tam parlak). @property ile sayı olarak
+           tanımlandığı için animasyonda yumuşakça değişir; parlama bu tek değerden hesaplanır */
         @property --link-glow {
             syntax: "<number>";
             inherits: false;
             initial-value: 0;
         }
 
-        /* Her link döngünün sadece %40-60 arasında kısa bir an yanıp söner */
+        /* Her link döngünün sadece ilk %10'unda yanar: hızla yanar, kısa bir süre parlak kalır, söner */
         @keyframes nav-link-wave {
 
             0%,
-            40%,
-            60%,
+            10%,
             100% {
                 --link-glow: 0;
             }
 
-            50% {
+            3%,
+            7% {
                 --link-glow: 1;
             }
         }
@@ -405,47 +420,45 @@
         @keyframes nav-link-wave-turbo {
 
             0%,
-            40%,
-            60%,
+            10%,
             100% {
                 --link-glow: 0;
             }
 
-            50% {
+            3%,
+            7% {
                 --link-glow: 1;
             }
         }
 
         nav a {
-            --wave-cycle: 2.4s;
-            /* header parlamasıyla aynı ritim */
-            --link-dim: rgba(250, 235, 215, 0.6);
-            /* sönükken: soluk antiquewhite */
             position: relative;
             font-family: var(--font-body);
             font-weight: 600;
             font-size: 14px;
             letter-spacing: 1.5px;
             text-decoration: none;
-            color: color-mix(in srgb, var(--accent) calc(var(--link-glow) * 100%), var(--link-dim));
-            text-shadow: 0 0 calc(var(--link-glow) * 8px) rgba(255, 176, 0, calc(var(--link-glow) * 0.9)),
-                0 0 calc(var(--link-glow) * 18px) rgba(255, 140, 0, calc(var(--link-glow) * 0.6));
+            color: antiquewhite;
+            /* yanarken renk değişmez, sadece aynı renkte bir hale belirir */
+            text-shadow: 0 0 calc(var(--link-glow) * 4px) rgba(250, 235, 215, calc(var(--link-glow) * 0.9)),
+                0 0 calc(var(--link-glow) * 12px) rgba(250, 235, 215, calc(var(--link-glow) * 0.7)),
+                0 0 calc(var(--link-glow) * 24px) rgba(250, 235, 215, calc(var(--link-glow) * 0.4));
             white-space: nowrap;
             /* link metni tek satırda kalsın */
 
-            /* Header en sönükken (döngü başı) linkler soldan sağa sırayla yanar, header en parlakken
-               (döngü ortası) hepsi sönüktür. --i linkin sırası (0-4, HTML'de); gecikme, i. linkin
-               parladığı anı header döngüsünün %80 + i×%10'una denk getirir */
-            animation: nav-link-wave var(--wave-cycle) ease-in-out infinite;
-            animation-delay: calc((0.1 * var(--i) - 0.7) * var(--wave-cycle));
+            /* Header döngünün ilk yarısında parlar; tamamen söndükten sonra (%50) linkler soldan
+               sağa birer birer yanar, sonuncusu sönünce (%96) header yeniden parlamaya başlar.
+               --i linkin sırası (0-4, HTML'de); gecikme, i. linkin yandığı anı döngünün
+               %50 + i×%9'una denk getirir */
+            animation: nav-link-wave var(--glow-cycle) ease-in-out infinite;
+            animation-delay: calc((0.09 * var(--i) - 0.5) * var(--glow-cycle));
         }
 
         body.mode-turbo nav a {
-            --wave-cycle: 0.6s;
             animation-name: nav-link-wave-turbo;
         }
 
-        /* Menü linkine üzerine gelince amber renk (sadece --link-glow canlandığı için dalgayı ezer) */
+        /* Menü linkine üzerine gelince amber renk */
         nav a:hover {
             color: var(--accent);
         }
@@ -468,13 +481,12 @@
             transform: scaleX(1);
         }
 
-        /* Hareket hassasiyeti olan kullanıcılar için dalga yok, linkler normal renkte durur */
+        /* Hareket hassasiyeti olan kullanıcılar için dalga yok, linkler sabit durur */
         @media (prefers-reduced-motion: reduce) {
 
             nav a,
             body.mode-turbo nav a {
                 animation: none;
-                --link-dim: antiquewhite;
             }
         }
 
@@ -593,7 +605,8 @@
             margin-top: 10px;
         }
 
-        /* Rozetler tıklanınca Intel / NVIDIA'nın ilgili ürün sayfası yeni sekmede açılır */
+        /* Rozetler tıklanınca Intel / NVIDIA'nın ilgili ürün sayfası yeni sekmede açılır.
+           Üzerine gelince her biri kendi marka renginde parlar (--badge-color, HTML'de) */
         .hero-badges a {
             display: block;
             border-radius: 6px;
@@ -612,12 +625,12 @@
         @media (hover: hover) {
             .hero-badges a:hover {
                 transform: translateY(-3px);
-                box-shadow: 0 0 0 1px var(--accent), 0 0 22px rgba(255, 176, 0, 0.45);
+                box-shadow: 0 0 0 1px rgba(var(--badge-color), 0.85), 0 0 22px rgba(var(--badge-color), 0.5);
             }
         }
 
         .hero-badges a:focus-visible {
-            outline: 2px solid var(--accent);
+            outline: 2px solid rgb(var(--badge-color));
             outline-offset: 4px;
         }
 
@@ -1421,11 +1434,12 @@
             <!-- Rozetler, laptoptaki parçaların resmi sayfalarına gider (yeni sekmede) -->
             <div class="hero-badges">
                 <a href="https://www.nvidia.com/tr-tr/geforce/laptops/50-series/" target="_blank" rel="noopener noreferrer"
+                    style="--badge-color: 118, 185, 0"
                     aria-label="NVIDIA GeForce RTX 50 Serisi dizüstü sayfası (yeni sekmede açılır)">
                     <img src="nvidia-geforce-rtx.jpg" alt="Nvidia GeForce RTX logosu">
                 </a>
                 <a href="https://www.intel.com/content/www/us/en/products/sku/232132/intel-core-i513450hx-processor-20m-cache-up-to-4-60-ghz/specifications.html"
-                    target="_blank" rel="noopener noreferrer"
+                    target="_blank" rel="noopener noreferrer" style="--badge-color: 0, 174, 239"
                     aria-label="Intel Core i5-13450HX teknik özellikleri (yeni sekmede açılır)">
                     <img src="Intel-Core-i5-Logo.png" alt="Intel Core i5 logosu">
                 </a>
