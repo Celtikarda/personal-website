@@ -20,6 +20,8 @@ Front-end becerilerimi geliştirmek için sıfırdan tasarladığım, ASUS TUF G
 
 - **Responsive tasarım:** Telefon, tablet, küçük laptop ve masaüstü için ayrı kırılım noktaları. Görsel ve metin geniş ekranda yan yana, dar ekranda alt alta dizilir; yatay telefonda header incelir.
 - **Mobil menü:** 1100 px altında hamburger menüye döner; Esc tuşu ya da menü dışına dokunmakla kapanır.
+- **Kaydırma efektleri:** Menü linkleri bölümlere yumuşakça kaydırır, bölümler ekrana girerken kayarak belirir. Header'ın alt kenarında okuma ilerleme çubuğu, navbar'da o an bakılan bölümün vurgusu ve sağ altta "yukarı çık" butonu var.
+- **Işık efektleri:** Navbar linkleri, header'ın parlamasıyla zıt ritimde soldan sağa sırayla yanıp söner.
 - **Lightbox:** Üzerinde yazı olan ürün görsellerine tıklayınca orijinal boyutunda açılır, küçük ekranda kaydırarak okunur.
 - **Teknik özellikler:** İkonlu kart grid'i ve öne çıkan özellik kartları.
 - **Erişilebilirlik:** `prefers-reduced-motion` desteği, klavyeyle kullanılabilen menü, `aria` etiketleri.
@@ -28,8 +30,8 @@ Front-end becerilerimi geliştirmek için sıfırdan tasarladığım, ASUS TUF G
 ## Kullanılan Teknolojiler
 
 - **HTML5** — semantik bölümler (`header`, `section`, `footer`)
-- **CSS3** — Flexbox, Grid, CSS değişkenleri, `clamp()`, keyframe animasyonları, media query'ler
-- **JavaScript** — framework'süz; menü, lightbox ve easter egg
+- **CSS3** — Flexbox, Grid, CSS değişkenleri, `@property`, `clamp()`, keyframe animasyonları, media query'ler
+- **JavaScript** — framework'süz; menü, lightbox, kaydırma efektleri (`IntersectionObserver`) ve easter egg
 
 ## Yerelde Çalıştırma
 
