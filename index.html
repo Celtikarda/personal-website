@@ -351,8 +351,9 @@
             justify-content: center;
             align-items: center;
             gap: 5px;
-            width: 38px;
-            height: 38px;
+            width: 44px;
+            height: 44px;
+            /* parmakla rahat basılabilecek boyut */
             padding: 0;
             background: transparent;
             border: 1px solid rgba(255, 176, 0, 0.4);
@@ -363,9 +364,23 @@
 
         .nav-toggle span {
             display: block;
-            width: 18px;
+            width: 20px;
             height: 2px;
             background: var(--accent);
+            transition: transform 0.25s ease, opacity 0.25s ease;
+        }
+
+        /* Menü açıkken üç çizgi X'e döner */
+        .nav-toggle[aria-expanded="true"] span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .nav-toggle[aria-expanded="true"] span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .nav-toggle[aria-expanded="true"] span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
         }
 
         /* ---------- Hero (giriş / kapak alanı) ---------- */
@@ -406,6 +421,8 @@
             color: var(--text-primary);
             margin: 0;
             letter-spacing: 1px;
+            text-wrap: balance;
+            /* satırlar eşit uzunlukta kırılır, "F16" tek başına alt satıra düşmez */
         }
 
         .hero-content h2 {
@@ -414,6 +431,7 @@
             font-weight: 900;
             color: var(--accent);
             margin: 0;
+            text-wrap: balance;
         }
 
         /* Nvidia / Intel rozetlerinin bulunduğu satır */
@@ -460,8 +478,6 @@
 
         .overview {
             display: flex;
-            flex-wrap: wrap-reverse;
-            /* dar ekranda görsel metnin üstüne geçer */
             align-items: center;
             justify-content: center;
             gap: 60px;
@@ -471,16 +487,24 @@
             /* içeriği yatayda ortalar */
         }
 
+        /* Görsel ve metin yan yana kalır; ekran daraldıkça alt alta kaymak yerine
+           560:480 oranını koruyarak birlikte küçülür (alt alta geçiş 860px'te) */
+        .overview-media {
+            flex: 7 1 0;
+            max-width: 560px;
+            min-width: 0;
+        }
+
         .overview-media img {
             display: block;
-            width: min(560px, 90vw);
-            /* geniş ekranda 560px, dar ekranda ekranın %90'ı */
+            width: 100%;
             height: auto;
             filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
             /* ürün fotoğrafının altına gölge */
         }
 
         .overview-text {
+            flex: 6 1 0;
             max-width: 480px;
             display: flex;
             flex-direction: column;
@@ -526,7 +550,6 @@
             padding: 80px 60px;
             max-width: 1200px;
             margin: 0 auto;
-            flex-wrap: wrap;
             border-top: 1px solid rgba(255, 176, 0, 0.2);
             /* bir üstteki bölümden ince bir çizgiyle ayrılır */
         }
@@ -536,14 +559,22 @@
             flex-direction: row-reverse;
         }
 
+        /* Overview'daki gibi: yan yana kalıp birlikte küçülür */
+        .feature-media {
+            flex: 1 1 0;
+            max-width: 440px;
+            min-width: 0;
+        }
+
         .feature-media img {
             display: block;
-            width: min(440px, 90vw);
+            width: 100%;
             height: auto;
             filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
         }
 
         .feature-text {
+            flex: 1 1 0;
             max-width: 460px;
             display: flex;
             flex-direction: column;
@@ -670,12 +701,15 @@
             transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
         }
 
-        /* Kart üzerine gelince hafifçe yukarı kalkar ve amber parlama alır */
-        .specs-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent);
-            background: rgba(255, 176, 0, 0.05);
-            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 176, 0, 0.12);
+        /* Kart üzerine gelince hafifçe yukarı kalkar ve amber parlama alır.
+           Sadece fareli cihazlarda: dokunmatik ekranda dokunulan kart yukarıda takılı kalmasın */
+        @media (hover: hover) {
+            .specs-card:hover {
+                transform: translateY(-4px);
+                border-color: var(--accent);
+                background: rgba(255, 176, 0, 0.05);
+                box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 176, 0, 0.12);
+            }
         }
 
         /* İkon rozeti + başlık aynı satırda */
@@ -744,10 +778,12 @@
             transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
         }
 
-        .specs-highlight-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent);
-            box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5), 0 0 24px rgba(255, 176, 0, 0.15);
+        @media (hover: hover) {
+            .specs-highlight-card:hover {
+                transform: translateY(-4px);
+                border-color: var(--accent);
+                box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5), 0 0 24px rgba(255, 176, 0, 0.15);
+            }
         }
 
         .specs-highlight-media img {
@@ -840,9 +876,20 @@
 
         /* ---------- Responsive (tablet / küçük laptop / telefon düzeltmeleri) ---------- */
 
-        /* Menü hamburger'a döner: ortadaki durum ışığı menü linkleriyle çakışmasın diye
-           bu kırılım 1320px'te (linkler + ortalanmış ışık bundan dar ekrana sığmıyor) */
+        /* Küçük laptop / büyük yatay tablet: menü linkleri hâlâ sığıyor, sadece header'ın
+           kenar boşluğu ve linkler arası boşluk daraltılır */
         @media (max-width: 1320px) {
+            header {
+                padding: 0 32px;
+            }
+
+            nav {
+                gap: 22px;
+            }
+        }
+
+        /* Menü hamburger'a döner: bu genişliğin altında linkler ortadaki durum ışığıyla çakışıyor */
+        @media (max-width: 1100px) {
             header {
                 padding: 0 24px;
             }
@@ -861,14 +908,19 @@
                 gap: 0;
                 max-height: 0;
                 overflow: hidden;
+                visibility: hidden;
+                /* kapalıyken linkler Tab tuşuyla seçilemesin */
                 background: var(--bg);
                 border-bottom: 2px solid var(--accent);
-                transition: max-height 0.3s ease;
+                transition: max-height 0.3s ease, visibility 0s linear 0.3s;
+                /* kapanırken önce yukarı kayar, sonra gizlenir */
             }
 
             /* JS bu sınıfı ekleyip çıkararak menüyü açar/kapatır */
             nav.open {
                 max-height: 320px;
+                visibility: visible;
+                transition: max-height 0.3s ease;
             }
 
             nav a {
@@ -902,15 +954,22 @@
             }
         }
 
-        @media (max-width: 700px) {
+        /* Dikey tablet ve telefon: görsel üstte, metin altta, ortalanmış */
+        @media (max-width: 860px) {
             .overview,
             .feature,
             .feature--reverse {
                 flex-direction: column;
-                /* görsel ve metni alt alta diz */
-                padding-left: 20px;
-                padding-right: 20px;
                 text-align: center;
+            }
+
+            .overview-media,
+            .feature-media,
+            .overview-text,
+            .feature-text {
+                flex: none;
+                width: 100%;
+                /* max-width (560/440/480/460px) geçerli kalır */
             }
 
             .overview-text,
@@ -918,10 +977,26 @@
                 align-items: center;
             }
 
+            /* Liste blok olarak ortada, satırları sola hizalı: madde işaretleri alt alta dursun */
             .feature-text ul {
-                padding-left: 0;
-                list-style-position: inside;
-                /* madde işaretleri metinle hizalı, taşma yapmasın diye */
+                text-align: left;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .overview,
+            .feature,
+            .feature--reverse {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .overview-text .description {
+                font-size: 1.15rem;
+            }
+
+            footer {
+                padding: 30px 20px;
             }
 
             .specs {
@@ -965,6 +1040,21 @@
 
             .specs-highlight-caption h4 {
                 font-size: 0.95rem;
+            }
+        }
+
+        /* Yatay telefon gibi kısa ekranlar: header incelir, içeriğe yer açılır */
+        @media (max-height: 500px) and (orientation: landscape) {
+            :root {
+                --header-height: 56px;
+            }
+
+            .logo {
+                height: 34px;
+            }
+
+            .status-leds {
+                height: 28px;
             }
         }
     </style>
@@ -1430,6 +1520,11 @@
             var toggle = document.getElementById('navToggle');
             var nav = document.getElementById('siteNav');
 
+            function closeNav() {
+                nav.classList.remove('open');
+                toggle.setAttribute('aria-expanded', 'false');
+            }
+
             toggle.addEventListener('click', function () {
                 var isOpen = nav.classList.toggle('open');
                 toggle.setAttribute('aria-expanded', String(isOpen));
@@ -1437,10 +1532,22 @@
 
             // Bir linke tıklayınca menü otomatik kapansın
             nav.querySelectorAll('a').forEach(function (link) {
-                link.addEventListener('click', function () {
-                    nav.classList.remove('open');
-                    toggle.setAttribute('aria-expanded', 'false');
-                });
+                link.addEventListener('click', closeNav);
+            });
+
+            // Menünün dışına dokununca / tıklayınca kapansın
+            document.addEventListener('click', function (e) {
+                if (nav.classList.contains('open') && !nav.contains(e.target) && !toggle.contains(e.target)) {
+                    closeNav();
+                }
+            });
+
+            // Esc tuşuyla kapansın, odak tekrar menü butonuna dönsün
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && nav.classList.contains('open')) {
+                    closeNav();
+                    toggle.focus();
+                }
             });
         })();
 
